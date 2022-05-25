@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 var cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 app.use(cors());
 app.use(express.json());
@@ -26,6 +26,12 @@ async function run() {
 
     // get all product
 
+    app.get("/product/:id", async (req, res) => {
+        const id = req.params.id
+      const query = {_id:ObjectId(id)};
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
     app.get("/products", async (req, res) => {
       const query = {};
       const cursor = await productCollection.find(query);
@@ -44,5 +50,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log("runing curd");
+  console.log("running curd");
 });
