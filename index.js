@@ -23,6 +23,7 @@ async function run() {
     // for database connection
 
     const productCollection = client.db("carpenter").collection("products");
+    const orderCollection = client.db("carpenter").collection("order");
 
     // get all product
 
@@ -38,6 +39,20 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+
+    // order part
+
+    app.post("/order", async (req, res) => {
+        const newItem  = req.body
+        const result = await orderCollection.insertOne(newItem);
+        res.send(result);
+      });
+
+
+
+
+
   } finally {
     // await client.close();
   }
