@@ -41,6 +41,26 @@ async function run() {
     });
 
 
+    app.put("/product/:id", async (req, res) => {
+        const id = req.params.id;
+        const quantity  = req.body.quantity
+
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateItem = {
+  
+          $set: {
+              quantity
+    
+          },
+    
+        };
+        const result = await productCollection.updateOne(filter,updateItem,options);
+        res.send(result)
+        
+      });
+
+
     // order part
 
     app.post("/order", async (req, res) => {
