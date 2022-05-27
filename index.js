@@ -24,6 +24,7 @@ async function run() {
 
     const productCollection = client.db("carpenter").collection("products");
     const orderCollection = client.db("carpenter").collection("order");
+    const reviewCollection = client.db("carpenter").collection("review");
 
     // get all product
 
@@ -70,6 +71,20 @@ async function run() {
       });
 
 
+    //   review part
+
+    app.post("/review", async (req, res) => {
+        const newItem  = req.body
+        const result = await reviewCollection.insertOne(newItem);
+        res.send(result);
+      });
+
+      app.get("/review", async (req, res) => {
+        const query = {};
+        const cursor = await reviewCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+      });
 
 
 
