@@ -29,8 +29,8 @@ async function run() {
     // get all product
 
     app.get("/product/:id", async (req, res) => {
-        const id = req.params.id
-      const query = {_id:ObjectId(id)};
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
       const result = await productCollection.findOne(query);
       res.send(result);
     });
@@ -41,53 +41,57 @@ async function run() {
       res.send(result);
     });
 
-
     app.put("/product/:id", async (req, res) => {
-        const id = req.params.id;
-        const quantity  = req.body.quantity
+      const id = req.params.id;
+      const quantity = req.body.quantity;
 
-        const filter = { _id: ObjectId(id) };
-        const options = { upsert: true };
-        const updateItem = {
-  
-          $set: {
-              quantity
-    
-          },
-    
-        };
-        const result = await productCollection.updateOne(filter,updateItem,options);
-        res.send(result)
-        
-      });
-
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateItem = {
+        $set: {
+          quantity,
+        },
+      };
+      const result = await productCollection.updateOne(
+        filter,
+        updateItem,
+        options
+      );
+      res.send(result);
+    });
 
     // order part
 
     app.post("/order", async (req, res) => {
-        const newItem  = req.body
-        const result = await orderCollection.insertOne(newItem);
-        res.send(result);
-      });
+      const newItem = req.body;
+      const result = await orderCollection.insertOne(newItem);
+      res.send(result);
+    });
 
+    app.get("/myorders", async (req, res) => {
+      const email = req.query.email;
+      console.log(email);
+      const query = { email: email };
+      const cursor = await orderCollection.find(query);
+      const myOrders = await cursor.toArray();
+      console.log(myOrders);
+      res.send(myOrders);
+    });
 
     //   review part
 
     app.post("/review", async (req, res) => {
-        const newItem  = req.body
-        const result = await reviewCollection.insertOne(newItem);
-        res.send(result);
-      });
+      const newItem = req.body;
+      const result = await reviewCollection.insertOne(newItem);
+      res.send(result);
+    });
 
-      app.get("/review", async (req, res) => {
-        const query = {};
-        const cursor = await reviewCollection.find(query);
-        const result = await cursor.toArray();
-        res.send(result);
-      });
-
-
-
+    app.get("/review", async (req, res) => {
+      const query = {};
+      const cursor = await reviewCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
