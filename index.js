@@ -49,7 +49,7 @@ async function run() {
       const options = { upsert: true };
       const updateItem = {
         $set: {
-          quantit,
+          quantity,
         },
       };
       const result = await productCollection.updateOne(
